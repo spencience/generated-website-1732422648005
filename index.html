@@ -3,108 +3,190 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Assistant Visualization</title>
+<title>AI Assistant Visualization - Enhanced</title>
 <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #0a0a2a;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow: hidden;
-        }
-        .container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 50px auto;
-            perspective: 1000px;
-        }
-        .cube {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: rotate 20s infinite linear;
-        }
-        .face {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border: 2px solid #4a90e2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            background: rgba(74, 144, 226, 0.1);
-            backdrop-filter: blur(5px);
-        }
-        .front { transform: translateZ(150px); }
-        .back { transform: translateZ(-150px) rotateY(180deg); }
-        .right { transform: rotateY(90deg) translateZ(150px); }
-        .left { transform: rotateY(-90deg) translateZ(150px); }
-        .top { transform: rotateX(90deg) translateZ(150px); }
-        .bottom { transform: rotateX(-90deg) translateZ(150px); }
-        @keyframes rotate {
-            from { transform: rotateX(0) rotateY(0); }
-            to { transform: rotateX(360deg) rotateY(360deg); }
-        }
-        .binary {
-            position: absolute;
-            font-family: monospace;
-            font-size: 12px;
-            color: #4a90e2;
-            opacity: 0.5;
-            animation: fade 2s infinite alternate;
-        }
-        @keyframes fade {
-            from { opacity: 0.2; }
-            to { opacity: 0.8; }
-        }
-        h1 {
-            margin: 20px;
-            color: #4a90e2;
-            text-align: center;
-        }
-        .info {
-            margin: 20px;
-            text-align: center;
-            max-width: 600px;
-        }
-    </style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background: #0a0a2a;
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+    }
+    .container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        margin: 50px auto;
+        perspective: 1000px;
+    }
+    .cube {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: rotate 20s infinite linear;
+        animation-play-state: running;
+    }
+    .cube.paused {
+        animation-play-state: paused;
+    }
+    .face {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border: 2px solid #4a90e2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        background: rgba(74, 144, 226, 0.1);
+        backdrop-filter: blur(5px);
+        transition: background 0.3s;
+    }
+    .face:hover {
+        background: rgba(74, 144, 226, 0.3);
+    }
+    .front { transform: translateZ(150px); }
+    .back { transform: translateZ(-150px) rotateY(180deg); }
+    .right { transform: rotateY(90deg) translateZ(150px); }
+    .left { transform: rotateY(-90deg) translateZ(150px); }
+    .top { transform: rotateX(90deg) translateZ(150px); }
+    .bottom { transform: rotateX(-90deg) translateZ(150px); }
+    @keyframes rotate {
+        from { transform: rotateX(0) rotateY(0); }
+        to { transform: rotateX(360deg) rotateY(360deg); }
+    }
+    .binary {
+        position: absolute;
+        font-family: monospace;
+        font-size: 12px;
+        color: #4a90e2;
+        opacity: 0.5;
+        animation: fade 2s infinite alternate;
+    }
+    @keyframes fade {
+        from { opacity: 0.2; }
+        to { opacity: 0.8; }
+    }
+    h1 {
+        margin: 20px;
+        color: #4a90e2;
+        text-align: center;
+    }
+    .info {
+        margin: 20px;
+        text-align: center;
+        max-width: 600px;
+    }
+    .controls {
+        margin: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    button {
+        padding: 10px 20px;
+        background: #4a90e2;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    button:hover {
+        background: #357abd;
+    }
+    .speed-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #4a90e2;
+    }
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+    }
+    .dark-theme {
+        background: #0a0a2a;
+    }
+    .light-theme {
+        background: #f0f0f0;
+        color: #0a0a2a;
+    }
+</style>
 </head>
-<body>
+<body class="dark-theme">
+<button class="theme-toggle" aria-label="Toggle theme">🌓</button>
 <h1>AI Assistant Visualization</h1>
-<div class="container">
-<div class="cube">
-<div class="face front">AI</div>
-<div class="face back">LOGIC</div>
-<div class="face right">DATA</div>
-<div class="face left">CODE</div>
-<div class="face top">LEARN</div>
-<div class="face bottom">ADAPT</div>
+
+<div class="controls">
+    <button id="playPause" aria-label="Play or pause cube rotation">⏯️ Play/Pause</button>
+    <div class="speed-control">
+        <label for="speed">Rotation Speed:</label>
+        <input type="range" id="speed" min="5" max="30" value="20" aria-label="Adjust rotation speed">
+        <span id="speedValue">20s</span>
+    </div>
 </div>
+
+<div class="container" role="region" aria-label="3D rotating cube visualization">
+    <div class="cube">
+        <div class="face front" role="img" aria-label="Front face showing AI">AI</div>
+        <div class="face back" role="img" aria-label="Back face showing LOGIC">LOGIC</div>
+        <div class="face right" role="img" aria-label="Right face showing DATA">DATA</div>
+        <div class="face left" role="img" aria-label="Left face showing CODE">CODE</div>
+        <div class="face top" role="img" aria-label="Top face showing LEARN">LEARN</div>
+        <div class="face bottom" role="img" aria-label="Bottom face showing ADAPT">ADAPT</div>
+    </div>
 </div>
+
 <div class="info">
-<p>This visualization represents the multifaceted nature of an AI assistant, showing different aspects of its functionality through a rotating 3D cube. Each face represents a core aspect of AI capabilities.</p>
-<p>The continuous rotation symbolizes the ongoing process of learning and adaptation.</p>
+    <p>This visualization represents the multifaceted nature of an AI assistant, showing different aspects of its functionality through a rotating 3D cube. Each face represents a core aspect of AI capabilities.</p>
+    <p>The continuous rotation symbolizes the ongoing process of learning and adaptation.</p>
+    <p>Use the controls above to adjust the animation to your preference.</p>
 </div>
+
 <script>
-        function createBinaryBackground() {
-            const container = document.body;
-            for(let i = 0; i < 50; i++) {
-                const binary = document.createElement('div');
-                binary.className = 'binary';
-                binary.style.left = Math.random() * 100 + 'vw';
-                binary.style.top = Math.random() * 100 + 'vh';
-                binary.textContent = Math.random() > 0.5 ? '1' : '0';
-                container.appendChild(binary);
-            }
-        }
-        createBinaryBackground();
-    </script>
+const cube = document.querySelector('.cube');
+const playPauseBtn = document.getElementById('playPause');
+const speedControl = document.getElementById('speed');
+const speedValue = document.getElementById('speedValue');
+const themeToggle = document.querySelector('.theme-toggle');
+
+playPauseBtn.addEventListener('click', () => {
+    cube.classList.toggle('paused');
+    playPauseBtn.setAttribute('aria-pressed', cube.classList.contains('paused'));
+});
+
+speedControl.addEventListener('input', (e) => {
+    const speed = e.target.value;
+    cube.style.animationDuration = `${speed}s`;
+    speedValue.textContent = `${speed}s`;
+});
+
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    document.body.classList.toggle('dark-theme');
+});
+
+function createBinaryBackground() {
+    const container = document.body;
+    for(let i = 0; i < 50; i++) {
+        const binary = document.createElement('div');
+        binary.className = 'binary';
+        binary.style.left = Math.random() * 100 + 'vw';
+        binary.style.top = Math.random() * 100 + 'vh';
+        binary.textContent = Math.random() > 0.5 ? '1' : '0';
+        binary.setAttribute('aria-hidden', 'true');
+        container.appendChild(binary);
+    }
+}
+createBinaryBackground();
+</script>
 </body>
 </html>
